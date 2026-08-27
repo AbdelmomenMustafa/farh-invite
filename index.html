@@ -360,7 +360,9 @@
       function MusicButton(){
         const[playing,setPlaying]=useState(false);
         const[pulsing,setPulsing]=useState(false);
-        return <button onClick={()=>{setPulsing(true);setTimeout(()=>setPulsing(false),300);setPlaying(!playing)}} style={{position:'fixed',bottom:28,right:24,zIndex:999,width:56,height:56,borderRadius:'50%',border:'none',background:'radial-gradient(circle at 38% 38%,'+T.burgundyMid+' 0%,'+T.burgundy+' 70%,#3a0810 100%)',boxShadow:playing?'0 0 0 6px '+T.burgundy+'30, 0 8px 24px '+T.burgundy+'60':'0 4px 16px '+T.burgundy+'50',transform:pulsing?'scale(.88)':'scale(1)',transition:'box-shadow .4s ease, transform .15s ease',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+        const audioRef=useRef(null);
+        useEffect(()=>{audioRef.current=new Audio('Karim%20yaakoubi.mp3');audioRef.current.loop=true},[]);
+        return <button onClick={()=>{setPulsing(true);setTimeout(()=>setPulsing(false),300);if(!audioRef.current)return;playing?audioRef.current.pause():audioRef.current.play().catch(()=>{});setPlaying(!playing)}} style={{position:'fixed',bottom:28,right:24,zIndex:999,width:56,height:56,borderRadius:'50%',border:'none',background:'radial-gradient(circle at 38% 38%,'+T.burgundyMid+' 0%,'+T.burgundy+' 70%,#3a0810 100%)',boxShadow:playing?'0 0 0 6px '+T.burgundy+'30, 0 8px 24px '+T.burgundy+'60':'0 4px 16px '+T.burgundy+'50',transform:pulsing?'scale(.88)':'scale(1)',transition:'box-shadow .4s ease, transform .15s ease',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
           {playing&&<div style={{position:'absolute',inset:-4,borderRadius:'50%',border:'2px solid '+T.gold,borderTopColor:'transparent',animation:'spin 2s linear infinite',pointerEvents:'none'}}/>}
           {playing?<svg width="22" height="22" viewBox="0 0 24 24" fill={T.cream}><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
           :<svg width="22" height="22" viewBox="0 0 24 24" fill={T.cream}><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>}
