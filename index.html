@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invitation - محمود & بنت عبدالعزيز</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+      :root{--burgundy:#6b1425;--burgundy-mid:#8b2035;--burgundy-light:#a83050;--cream:#faf5eb;--cream-dark:#ede0c4;--cream-deeper:#d4bc95;--gold:#c9a96e;--gold-dark:#a8803c;--green:#5a6b3a;--green-dark:#3e4e25;--text-dark:#3a0f18;--text-mid:#5c1e2d}
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{background-color:var(--cream);color:var(--text-dark);font-family:'Cairo',sans-serif;overflow-x:hidden}
+      .font-names{font-family:'Playfair Display',serif}
+      .font-ampersand{font-family:'Great Vibes',cursive}
+      @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+      @keyframes scaleUp{0%{opacity:0;transform:scale(.88)}100%{opacity:1;transform:scale(1)}}
+      @keyframes slideUp{0%{opacity:0;transform:translateY(18px)}100%{opacity:1;transform:translateY(0)}}
+      @keyframes floatHeart{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-14px) rotate(var(--rot,0deg))}}
+      @keyframes openingExit{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
+      @keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .anim-bg{animation:.7s both fadeIn}
+      .anim-card{animation:.9s cubic-bezier(.22,.61,.36,1) .25s both scaleUp}
+      .anim-heart{animation:.6s .9s both slideUp}
+      .anim-name1{animation:.6s 1.1s both slideUp}
+      .anim-amp{animation:.6s 1.25s both slideUp}
+      .anim-name2{animation:.6s 1.4s both slideUp}
+      .anim-div{animation:.5s 1.6s both slideUp}
+      .anim-date{animation:.5s 1.75s both slideUp}
+      .anim-phrase{animation:.5s 1.95s both slideUp}
+      .anim-btn{animation:.6s 2.15s both slideUp}
+      .anim-eng{animation:.6s 2.35s both slideUp}
+      .opening-exit{animation:.7s cubic-bezier(.4,0,.6,1) forwards openingExit}
+      .gold-line{background:linear-gradient(to right,transparent,var(--gold),transparent);height:1px}
+      ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--burgundy-light)}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      const{useState,useEffect,useRef}=React;
+      const T={burgundy:'#6b1425',burgundyMid:'#8b2035',burgundyLight:'#a83050',cream:'#faf5eb',creamDark:'#ede0c4',creamDeeper:'#d4bc95',gold:'#c9a96e',goldDark:'#a8803c',green:'#5a6b3a',greenDark:'#3e4e25',textDark:'#3a0f18'};
+
+      /* ===== FLORALS ===== */
+      function Flower({cx=0,cy=0,r=50,color=T.burgundy,inner=T.burgundyMid,light=T.burgundyLight,op=1}){
+        return <g transform={`translate(${cx},${cy})`} opacity={op}>
+          {[0,60,120,180,240,300].map((a,i)=><ellipse key={i} rx={r*.44} ry={r*.7} fill={color} transform={`rotate(${a}) translate(0,${-r*.3})`}/>)}
+          {[30,90,150,210,270,330].map((a,i)=><ellipse key={i} rx={r*.34} ry={r*.54} fill={inner} transform={`rotate(${a}) translate(0,${-r*.19})`}/>)}
+          {[15,75,135,195,255,315].map((a,i)=><ellipse key={i} rx={r*.22} ry={r*.36} fill={light} transform={`rotate(${a}) translate(0,${-r*.09})`}/>)}
+          <circle r={r*.18} fill={color}/><circle r={r*.08} fill={T.gold} opacity={.9}/>
+        </g>;
+      }
+      function Leaf({x1,y1,x2,y2,w=13,col=T.green}){
+        let mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy),nx=-dy/l*w,ny=dx/l*w;
+        return <path d={`M${x1} ${y1} Q${mx+nx} ${my+ny} ${x2} ${y2} Q${mx-nx} ${my-ny} ${x1} ${y1}`} fill={col} opacity={.72}/>;
+      }
+      function VineFlower({x,y:cy,flip}){
+        let f=flip?-1:1;
+        return <g transform={`translate(${x},${cy})`}>
+          <path d={`M0 0 C${f*12} -35,${f*6} -68,${f*18} -100`} stroke={T.green} strokeWidth="2" fill="none" opacity={.8}/>
+          <path d={`M${f*18} -100 C${f*28} -125,${f*42} -112,${f*36} -130`} stroke={T.green} strokeWidth="1.5" fill="none" opacity={.7}/>
+          <path d={`M${f*12} -75 C${f*28} -82,${f*40} -70,${f*34} -58`} stroke={T.green} strokeWidth="1.5" fill="none" opacity={.65}/>
+          <circle cx={f*37} cy={-133} r="5" fill={T.burgundy} opacity={.8}/>
+          <circle cx={f*30} cy={-122} r="4" fill={T.burgundy} opacity={.72}/>
+          <circle cx={f*42} cy={-120} r="3.5" fill={T.burgundy} opacity={.65}/>
+          <circle cx={f*36} cy={-60} r="4" fill={T.burgundy} opacity={.68}/>
+          <circle cx={f*29} cy={-50} r="3" fill={T.burgundy} opacity={.6}/>
+          <path d={`M${f*6} -40 C${f*20} -50,${f*30} -45,${f*22} -30`} stroke={T.green} strokeWidth="1.2" fill="none" opacity={.55}/>
+          <circle cx={f*14} cy={-20} r="3" fill={T.gold} opacity={.7}/>
+          <circle cx={f*22} cy={-30} r="2.5" fill={T.gold} opacity={.6}/>
+        </g>;
+      }
+      function FloralCorner({w=220,h=320,flip=false,delay='0s'}){
+        return <div style={{animation:`floatBob 4s ease-in-out ${delay} infinite`,display:'inline-block'}}>
+          <svg viewBox="0 0 220 320" width={w} height={h} fill="none" style={flip?{transform:'scaleX(-1)'}:{}}>
+            <Flower cx={78} cy={218} r={58} color={T.burgundy} inner={T.burgundyMid} light={T.burgundyLight}/>
+            <Flower cx={158} cy={258} r={38} color={T.creamDeeper} inner={T.creamDark} light={T.cream}/>
+            <Flower cx={58} cy={155} r={30} color={T.burgundyMid} inner={T.burgundyLight} light="#c24060" op={.88}/>
+            <Leaf x1={35} y1={285} x2={88} y2={232} w={14} col={T.greenDark}/>
+            <Leaf x1={115} y1={295} x2={158} y2={262} w={11} col={T.green}/>
+            <Leaf x1={148} y1={212} x2={190} y2={235} w={10} col={T.green}/>
+            <Leaf x1={25} y1={205} x2={52} y2={162} w={11} col={T.greenDark}/>
+            <Leaf x1={165} y1={285} x2={200} y2={265} w={9} col={T.green}/>
+            <VineFlower x={105} y={148}/>
+            <circle cx={168} cy={178} r="3.5" fill={T.gold} opacity={.65}/>
+            <circle cx={158} cy={163} r="2.5" fill={T.gold} opacity={.55}/>
+            <circle cx={175} cy={192} r="2" fill={T.gold} opacity={.5}/>
+          </svg>
+        </div>;
+      }
+      function FloralCornerSmall({w=140,h=200,flip=false,delay='0s'}){
+        return <div style={{animation:`floatBob 3.5s ease-in-out ${delay} infinite`,display:'inline-block'}}>
+          <svg viewBox="0 0 140 200" width={w} height={h} fill="none" style={flip?{transform:'scaleX(-1)'}:{}}>
+            <Flower cx={50} cy={140} r={40} color={T.burgundy} inner={T.burgundyMid} light={T.burgundyLight}/>
+            <Flower cx={105} cy={165} r={26} color={T.creamDeeper} inner={T.creamDark} light={T.cream}/>
+            <Flower cx={42} cy={100} r={20} color={T.burgundyMid} inner={T.burgundyLight} light="#c24060" op={.85}/>
+            <Leaf x1={20} y1={185} x2={58} y2={148} w={11} col={T.greenDark}/>
+            <Leaf x1={78} y1={190} x2={105} y2={168} w={9} col={T.green}/>
+            <Leaf x1={15} y1={130} x2={35} y2={105} w={8} col={T.greenDark}/>
+            <VineFlower x={68} y={95}/>
+          </svg>
+        </div>;
+      }
+
+      /* ===== UI ===== */
+      function GoldDivider({color=T.gold,className='',width}){
+        return <div className={className} style={{display:'flex',alignItems:'center',gap:12,width:width||'75%'}}>
+          <div style={{flex:1,height:1,background:`linear-gradient(to left,${color},transparent)`}}/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 1L13.8 9.2L22 12L13.8 14.8L12 23L10.2 14.8L2 12L10.2 9.2Z" fill={color} opacity=".85"/></svg>
+          <div style={{flex:1,height:1,background:`linear-gradient(to right,${color},transparent)`}}/>
+        </div>;
+      }
+      function useInView(threshold=.12){
+        const ref=useRef(null);const[vis,setVis]=useState(false);
+        useEffect(()=>{const o=new IntersectionObserver(([e])=>{if(e.isIntersecting)setVis(true)},{threshold});if(ref.current)o.observe(ref.current);return()=>o.disconnect()},[threshold]);
+        return{ref,vis};
+      }
+      function FadeIn({children,delay=0,y=30,className=''}){
+        const{ref,vis}=useInView();
+        return <div ref={ref} className={className} style={{opacity:vis?1:0,transform:vis?'translateY(0)':`translateY(${y}px)`,transition:`opacity .85s ease ${delay}s,transform .85s ease ${delay}s`}}>{children}</div>;
+      }
+      function FloatingHearts(){
+        return <>{[{left:'12%',top:'18%',size:10,delay:0,rot:'15deg',color:T.gold},{left:'22%',top:'42%',size:8,delay:1.2,rot:'-10deg',color:T.burgundyLight},{left:'76%',top:'22%',size:10,delay:.6,rot:'25deg',color:T.gold},{left:'83%',top:'55%',size:7,delay:1.8,rot:'-20deg',color:T.burgundyLight},{left:'8%',top:'72%',size:8,delay:.9,rot:'10deg',color:T.gold},{left:'90%',top:'78%',size:6,delay:.4,rot:'30deg',color:T.burgundyLight},{left:'55%',top:'10%',size:7,delay:1.5,rot:'-15deg',color:T.gold},{left:'38%',top:'85%',size:9,delay:.8,rot:'5deg',color:T.burgundyLight}].map((h,i)=>(
+          <div key={i} style={{position:'absolute',left:h.left,top:h.top,width:h.size,height:h.size,'--rot':h.rot,animation:`floatHeart ${2.8+i*.4}s ease-in-out ${h.delay}s infinite`,opacity:.5}}>
+            <svg viewBox="0 0 24 24" fill={h.color}><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        ))}</>;
+      }
+      function WaxSeal({size=40}){
+        return <svg width={size} height={size} viewBox="0 0 40 40">
+          <circle cx="20" cy="20" r="18" fill="url(#sealGrad)"/>
+          <circle cx="20" cy="20" r="14" fill="none" stroke={T.gold} strokeWidth=".8" opacity=".4"/>
+          <defs><radialGradient id="sealGrad" cx="35%" cy="35%"><stop offset="0%" stopColor={T.gold}/><stop offset="60%" stopColor={T.goldDark}/><stop offset="100%" stopColor="#7a5c20"/></radialGradient></defs>
+          <path d="M20 12l1.5 3.2 3.5.3-2.6 2.4.7 3.4-3.1-1.7-3.1 1.7.7-3.4-2.6-2.4 3.5-.3z" fill={T.burgundy} opacity=".5" transform="translate(0,2)"/>
+        </svg>;
+      }
+
+      /* ===== OPENING SCREEN ===== */
+      function OpeningScreen({onOpen}){
+        const[exiting,setExiting]=useState(false);
+        return <div className={`anim-bg ${exiting?'opening-exit':''}`} style={{position:'fixed',inset:0,zIndex:100,background:'radial-gradient(ellipse at 30% 40%,#8b2035 0%,'+T.burgundy+' 45%,#3d0b14 100%)',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
+          <FloatingHearts/>
+          <div className="anim-card" style={{background:T.cream,borderRadius:18,boxShadow:'0 32px 80px rgba(0,0,0,0.55),0 2px 8px rgba(0,0,0,0.3)',position:'relative',width:'min(88vw,580px)',overflow:'hidden',border:'1px solid '+T.creamDark}}>
+            <div style={{position:'absolute',inset:10,border:'1px solid '+T.gold,borderRadius:10,pointerEvents:'none',opacity:.6}}/>
+            <div style={{position:'absolute',bottom:-20,left:-30,zIndex:2}}><FloralCorner w={160} h={230}/></div>
+            <div style={{position:'absolute',bottom:-20,right:-30,zIndex:2}}><FloralCorner w={160} h={230} flip delay=".7s"/></div>
+            <div dir="rtl" style={{position:'relative',zIndex:3,padding:'44px 24px 40px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center'}}>
+              <div className="anim-heart" style={{width:48,height:48,borderRadius:'50%',background:T.burgundy,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:16,boxShadow:'0 4px 16px '+T.burgundy+'55'}}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </div>
+              <div className="anim-name1 font-names" style={{fontSize:'clamp(2rem,7vw,2.8rem)',fontWeight:600,color:T.burgundy,lineHeight:1.1,letterSpacing:'.02em'}}>محمود</div>
+              <div className="anim-amp font-ampersand" style={{fontSize:'clamp(1.8rem,6vw,2.4rem)',color:T.gold,margin:'2px 0'}}>&amp;</div>
+              <div className="anim-name2 font-names" style={{fontSize:'clamp(2rem,7vw,2.8rem)',fontWeight:600,color:T.burgundy,lineHeight:1.1,letterSpacing:'.02em',marginBottom:18}}>بنت عبدالعزيز</div>
+              <div className="anim-div" style={{width:'75%',marginBottom:14}}><GoldDivider/></div>
+              <div className="anim-date" style={{fontFamily:'Cairo,sans-serif',fontSize:'clamp(.95rem,3.5vw,1.1rem)',fontWeight:600,color:T.textDark,letterSpacing:'.05em',marginBottom:10}}>29 أغسطس 2026</div>
+              <div className="anim-phrase" style={{fontFamily:'Cairo,sans-serif',fontSize:'clamp(.8rem,3vw,.95rem)',fontWeight:400,color:T.burgundyMid,marginBottom:28,opacity:.85,lineHeight:1.6}}>يسعدنا دعوتكم لمشاركتنا أجمل لحظات حياتنا</div>
+              <button className="anim-btn" onClick={()=>{setExiting(true);setTimeout(onOpen,680)}} style={{background:T.burgundy,color:T.cream,fontFamily:'Cairo,sans-serif',fontWeight:700,fontSize:'1rem',border:'none',borderRadius:100,padding:'14px 44px',cursor:'pointer',letterSpacing:'.08em',boxShadow:'0 8px 24px '+T.burgundy+'50',transition:'all .3s ease',position:'relative',zIndex:10}} onMouseEnter={e=>{e.target.style.background=T.burgundyMid;e.target.style.transform='translateY(-2px)';e.target.style.boxShadow='0 12px 32px '+T.burgundy+'70'}} onMouseLeave={e=>{e.target.style.background=T.burgundy;e.target.style.transform='translateY(0)';e.target.style.boxShadow='0 8px 24px '+T.burgundy+'50'}}>افتح الدعوة</button>
+            </div>
+          </div>
+        </div>;
+      }
+
+      /* ===== SECTION 1: SAVE THE DATE ===== */
+      function SaveTheDateSection(){
+        return <section style={{background:T.cream,minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',padding:'80px 24px 60px',position:'relative',overflow:'hidden'}}>
+          <div style={{position:'absolute',bottom:-30,left:-40,opacity:.85,pointerEvents:'none'}}><FloralCorner w={210} h={290} delay=".9s"/></div>
+          <div style={{position:'absolute',bottom:-30,right:-40,opacity:.85,pointerEvents:'none'}}><FloralCorner w={210} h={290} flip delay=".2s"/></div>
+          <div style={{position:'absolute',top:0,left:-60,opacity:.06,pointerEvents:'none'}}><FloralCorner w={260} h={360} delay="1.5s"/></div>
+          <div style={{position:'absolute',top:0,right:-60,opacity:.06,pointerEvents:'none'}}><FloralCorner w={260} h={360} flip delay=".6s"/></div>
+          <FadeIn>
+            <div style={{position:'relative',width:'min(85vw,380px)',margin:'0 auto 48px'}}>
+              <div style={{background:T.burgundy,borderRadius:16,width:'100%',paddingBottom:'70%',position:'relative',boxShadow:'0 20px 60px '+T.burgundy+'40'}}>
+                <div style={{position:'absolute',top:0,left:0,right:0,height:'45%',background:'linear-gradient(160deg,'+T.burgundyMid+' 0%,'+T.burgundy+' 100%)',clipPath:'polygon(0 0,50% 55%,100% 0)',borderRadius:'16px 16px 0 0'}}/>
+                <div style={{position:'absolute',bottom:0,left:0,width:'50%',height:'60%',background:'linear-gradient(135deg,'+T.burgundyMid+'80 0%,transparent 60%)',clipPath:'polygon(0 100%,100% 100%,0 0)'}}/>
+                <div style={{position:'absolute',bottom:0,right:0,width:'50%',height:'60%',background:'linear-gradient(225deg,'+T.burgundyMid+'80 0%,transparent 60%)',clipPath:'polygon(0 100%,100% 100%,100% 0)'}}/>
+                <div style={{position:'absolute',bottom:'30%',left:'50%',transform:'translateX(-50%)',width:52,height:52,borderRadius:'50%',background:'radial-gradient(circle at 35% 35%,'+T.gold+' 0%,'+T.goldDark+' 60%,#7a5c20 100%)',boxShadow:'0 4px 12px rgba(0,0,0,0.3)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:5}}>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill={T.burgundy} opacity=".7"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+              </div>
+              <div style={{position:'absolute',top:-60,left:-30,zIndex:10}}><FloralCorner w={180} h={250} delay=".3s"/></div>
+              <div style={{position:'absolute',top:-40,right:-20,zIndex:10}}><FloralCornerSmall w={120} h={180} flip delay="1.2s"/></div>
+            </div>
+          </FadeIn>
+          <FadeIn delay={.2}>
+            <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.8rem',fontWeight:600,color:T.burgundy,letterSpacing:'.25em',textTransform:'uppercase',marginBottom:48,textAlign:'center',direction:'rtl'}}>بسم الله الرحمن الرحيم</p>
+          </FadeIn>
+          <FadeIn delay={.3}>
+            <p style={{fontFamily:'Cairo,sans-serif',fontSize:16,fontWeight:500,color:T.burgundy,letterSpacing:1,lineHeight:'24px',marginTop:20,marginBottom:24,textAlign:'center',direction:'rtl',maxWidth:480,padding:'0 16px'}}>وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَأيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ</p>
+          </FadeIn>
+          <FadeIn delay={.4}>
+            <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.9rem',fontWeight:500,color:T.burgundyMid,letterSpacing:1,lineHeight:'24px',marginBottom:40,textAlign:'center',direction:'rtl'}}>نتشرف بدعوتكم لحضور حفل زفاف<br/>على إتمام الخطوبة بحمد الله وتوفيقه ونرحب بكم جميعاً</p>
+          </FadeIn>
+          <FadeIn delay={.5}>
+            <div dir="rtl" style={{textAlign:'center',marginTop:16,display:'flex',alignItems:'center',justifyContent:'center',gap:'.6em',flexWrap:'wrap'}}>
+              <div className="font-names" style={{fontSize:'clamp(2.2rem,8vw,4rem)',fontWeight:600,color:T.burgundy,lineHeight:1.05}}>محمود</div>
+              <div className="font-ampersand" style={{fontSize:'clamp(2rem,6vw,3rem)',color:T.gold,margin:'0 .15em'}}>&amp;</div>
+              <div className="font-names" style={{fontSize:'clamp(2.2rem,8vw,4rem)',fontWeight:600,color:T.burgundy,lineHeight:1.05}}>بنت عبدالعزيز</div>
+            </div>
+          </FadeIn>
+          <FadeIn delay={.55}><div style={{width:280,margin:'24px auto 32px'}}><GoldDivider/></div></FadeIn>
+          <FadeIn delay={.6}>
+            <div style={{background:T.burgundy,borderRadius:20,width:'min(88vw,360px)',margin:'0 auto',padding:'32px 28px 28px',textAlign:'center',direction:'rtl',boxShadow:'0 20px 60px '+T.burgundy+'50',position:'relative',overflow:'hidden'}}>
+              <div style={{position:'absolute',inset:10,border:'1px solid '+T.gold+'30',borderRadius:12,pointerEvents:'none'}}/>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.78rem',fontWeight:600,color:T.gold,letterSpacing:'.18em',margin:'0 0 12px'}}>السبت التاسع والعشرين</p>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.72rem',fontWeight:600,color:T.gold,letterSpacing:'.16em',margin:'0 0 6px'}}>الساعة الثامنة</p>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'1.35rem',fontWeight:700,color:'#fff',margin:'0 0 14px',direction:'ltr'}}>8:00 PM</p>
+              <div style={{fontFamily:'Cairo,sans-serif',fontSize:'22px',fontWeight:700,color:'#fff',lineHeight:1.1,margin:'0 0 20px',letterSpacing:'.03em',direction:'ltr'}}>29/08/2026</div>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.72rem',fontWeight:600,color:T.gold,letterSpacing:'.16em',margin:'0 0 6px'}}>الموقع</p>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'1.35rem',fontWeight:700,color:'#fff',margin:'0 0 14px'}}>قاعة سارينا</p>
+              <a href="https://maps.app.goo.gl/cMj3Pq6pTCFbVskdA" target="_blank" rel="noopener noreferrer" style={{display:'block',background:T.gold+'18',border:'1px solid '+T.gold+'50',borderRadius:100,padding:'12px 24px',fontFamily:'Cairo,sans-serif',fontSize:'.9rem',fontWeight:600,color:'#fff',textDecoration:'none',transition:'background .2s'}} onMouseEnter={e=>e.currentTarget.style.background=T.gold+'30'} onMouseLeave={e=>e.currentTarget.style.background=T.gold+'18'}>عرض الموقع على خرائط جوجل</a>
+            </div>
+          </FadeIn>
+        </section>;
+      }
+
+      /* ===== SECTION 2: DATE/CALENDAR ===== */
+      function DateSection(){
+        const dayNames=['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+        const blanks=5;
+        const days=[...Array(blanks).fill(null),...Array.from({length:31},(_,i)=>i+1)];
+        const addToCalendar=()=>{window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=حفل+زفاف+محمود+وبنت+عبدالعزيز&dates=20260829T190000/20260829T230000&details=قاعة+سارينا','_blank')};
+        return <section style={{background:T.cream,padding:'60px 24px 80px',position:'relative',overflow:'hidden'}}>
+          <div style={{position:'absolute',bottom:-30,left:-40,opacity:.85,pointerEvents:'none'}}><FloralCorner w={210} h={290} delay="1.1s"/></div>
+          <div style={{position:'absolute',bottom:-30,right:-40,opacity:.85,pointerEvents:'none'}}><FloralCorner w={210} h={290} flip delay=".4s"/></div>
+          <div style={{position:'absolute',top:0,left:-60,opacity:.06,pointerEvents:'none'}}><FloralCornerSmall w={200} h={280} delay="1.8s"/></div>
+          <div style={{position:'absolute',top:0,right:-60,opacity:.06,pointerEvents:'none'}}><FloralCornerSmall w={200} h={280} flip delay=".7s"/></div>
+          <div style={{maxWidth:680,margin:'0 auto'}}>
+            <FadeIn>
+              <div style={{background:'linear-gradient(160deg,'+T.burgundyMid+' 0%,'+T.burgundy+' 100%)',borderRadius:20,padding:'clamp(40px,8vw,56px) clamp(24px,6vw,56px)',position:'relative',overflow:'visible',boxShadow:'0 24px 72px '+T.burgundy+'50'}}>
+                <div style={{position:'absolute',inset:12,border:'1px solid '+T.gold,borderRadius:12,opacity:.3,pointerEvents:'none'}}/>
+                <div style={{position:'absolute',top:-30,left:-40,pointerEvents:'none'}}><FloralCorner w={190} h={270} delay=".5s"/></div>
+                <div dir="rtl" style={{position:'relative',zIndex:2,textAlign:'center'}}>
+                  <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.75rem',fontWeight:600,color:T.gold,letterSpacing:'.25em',marginBottom:20}}>خيموا في سعادة الحب</p>
+                  <div style={{background:T.cream,borderRadius:14,padding:'24px 20px',maxWidth:340,margin:'0 auto 28px',overflow:'hidden'}}>
+                    <p style={{fontFamily:'Great Vibes,cursive',fontSize:'1.5rem',color:T.burgundy,marginBottom:12,textAlign:'center'}}>أغسطس ٢٠٢٦</p>
+                    <div style={{borderBottom:'1px solid '+T.creamDeeper,marginBottom:10}}/>
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:2,marginBottom:8}}>
+                      {dayNames.map(n=><div key={n} style={{textAlign:'center',fontFamily:'Cairo,sans-serif',fontSize:'.68rem',fontWeight:600,color:T.burgundyMid,opacity:.7,padding:'2px 0'}}>{n}</div>)}
+                    </div>
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:2}}>
+                      {days.map((d,i)=><div key={i} style={{position:'relative',textAlign:'center',padding:'5px 2px',fontFamily:'Cairo,sans-serif',fontSize:'clamp(.68rem,2.5vw,.78rem)',fontWeight:d===29?700:400,color:d===29?'#fff':d?T.textDark:'transparent',display:'flex',alignItems:'center',justifyContent:'center',width:30,height:30,margin:'0 auto'}}>
+                        {d===29&&<div style={{position:'absolute',inset:0}}><svg viewBox="0 0 32 30" width="30" height="30"><path d="M16 27C16 27 2 18 2 9.5 2 5.4 5.4 2 9.5 2 12.2 2 14.6 3.5 16 5.7 17.4 3.5 19.8 2 22.5 2 26.6 2 30 5.4 30 9.5 30 18 16 27 16 27Z" fill={T.burgundy}/></svg></div>}
+                        <span style={{position:'relative',zIndex:1}}>{d}</span>
+                      </div>)}
+                    </div>
+                  </div>
+                  <button onClick={addToCalendar} style={{background:'transparent',color:T.cream,fontFamily:'Cairo,sans-serif',fontWeight:600,fontSize:'.95rem',border:'1.5px solid '+T.gold,borderRadius:100,padding:'12px 36px',cursor:'pointer',letterSpacing:'.06em',transition:'all .3s ease'}} onMouseEnter={e=>{e.currentTarget.style.background=T.gold;e.currentTarget.style.color=T.burgundy}} onMouseLeave={e=>{e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.cream}}>أضف إلى تقويمك</button>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>;
+      }
+
+      /* ===== GUESTBOOK MESSAGE CARD ===== */
+      function GuestMessageCard({m,i}){
+        return <FadeIn delay={i*.07}>
+          <div style={{background:'#fff',borderRadius:16,overflow:'hidden',boxShadow:'0 4px 20px rgba(0,0,0,0.06)',border:'1px solid '+T.creamDark,transition:'all .3s ease',cursor:'default'}} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 12px 32px rgba(0,0,0,0.12)'}} onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'}}>
+            <div style={{background:'linear-gradient(135deg,'+T.burgundy+' 0%,'+T.burgundyMid+' 100%)',padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <WaxSeal size={32}/>
+                <span className="font-names" style={{color:T.cream,fontSize:'1.1rem',fontWeight:600}}>{m.guest_name}</span>
+              </div>
+              <WaxSeal size={24}/>
+            </div>
+            <div style={{padding:'16px 20px'}}>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.9rem',color:T.textDark,lineHeight:1.7,margin:0}}>{m.message}</p>
+            </div>
+            <div style={{padding:'8px 20px 12px',borderTop:'1px solid '+T.creamDark}}>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.72rem',color:T.burgundyMid,opacity:.6,margin:0}}>{new Date(m.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}</p>
+            </div>
+          </div>
+        </FadeIn>;
+      }
+
+      /* ===== GUESTBOOK SECTION ===== */
+      function GuestbookSection({onOpenModal}){
+        const[messages,setMessages]=useState([]);
+        const[loading,setLoading]=useState(true);
+        useEffect(()=>{
+          const API='https://diohbudqfguqiwvivspm.supabase.co';
+          const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpb2hidWRxZmd1cWl3dml2c3BtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1MzkxODEsImV4cCI6MjEwMjExNTE4MX0.j2S_FnCcI3HWpJiBceOqDsgAemmOY8CgZ-wBzDWoybw';
+          fetch(API+'/rest/v1/guestbook_messages?status=eq.applying&order=created_at.desc',{headers:{apikey:KEY,Authorization:'Bearer '+KEY}})
+            .then(r=>r.json()).then(d=>{setMessages(Array.isArray(d)?d:[]);setLoading(false)}).catch(()=>setLoading(false));
+        },[]);
+        return <section style={{background:'linear-gradient(170deg,'+T.cream+' 0%,'+T.creamDark+' 100%)',minHeight:'100vh',padding:'80px 24px 60px',position:'relative',overflow:'hidden'}}>
+          <div style={{position:'absolute',bottom:-30,left:-40,opacity:.85,pointerEvents:'none'}}><FloralCorner w={210} h={290} delay=".8s"/></div>
+          <div style={{position:'absolute',bottom:-30,right:-40,opacity:.15,pointerEvents:'none'}}><FloralCorner w={210} h={290} flip delay=".3s"/></div>
+          <div style={{position:'absolute',top:0,left:-60,opacity:.04,pointerEvents:'none'}}><FloralCorner w={260} h={360} delay="1.2s"/></div>
+          <div style={{position:'absolute',top:0,right:-60,opacity:.04,pointerEvents:'none'}}><FloralCorner w={260} h={360} flip delay=".5s"/></div>
+          <div style={{maxWidth:900,margin:'0 auto',position:'relative',zIndex:1}}>
+            <FadeIn>
+              <div style={{textAlign:'center',marginBottom:48}}>
+                <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.8rem',fontWeight:600,color:T.burgundy,letterSpacing:'.25em',textTransform:'uppercase',marginBottom:8}}>شاركوا كلماتكم الجميلة في يومهما المميز.</p>
+                <h2 className="font-names" style={{fontSize:'clamp(2rem,6vw,3rem)',color:T.burgundy,fontWeight:600,marginBottom:4}}>رسائل من القلب</h2>
+                <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.85rem',color:T.burgundyMid,opacity:.7}}>للمحمد & بنت عبدالعزيز</p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={.1}>
+              <div style={{textAlign:'center',marginBottom:32}}>
+                <button onClick={onOpenModal} style={{background:T.burgundy,color:T.cream,fontFamily:'Cairo,sans-serif',fontWeight:700,fontSize:'.95rem',border:'none',borderRadius:100,padding:'12px 36px',cursor:'pointer',letterSpacing:'.06em',boxShadow:'0 6px 20px '+T.burgundy+'40',transition:'all .3s ease'}} onMouseEnter={e=>{e.currentTarget.style.background=T.burgundyMid;e.currentTarget.style.transform='translateY(-2px)'}} onMouseLeave={e=>{e.currentTarget.style.background=T.burgundy;e.currentTarget.style.transform='translateY(0)'}}>أضف رسالتك</button>
+              </div>
+            </FadeIn>
+            {loading?<div style={{textAlign:'center',padding:40}}><div style={{width:40,height:40,border:'3px solid '+T.creamDark,borderTopColor:T.burgundy,borderRadius:'50%',animation:'spin 1s linear infinite',margin:'0 auto'}}/></div>
+            :messages.length===0?<FadeIn delay={.2}><div style={{textAlign:'center',padding:'40px 20px'}}>
+              <div style={{fontSize:'2.5rem',marginBottom:12,opacity:.3}}>?</div>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'1rem',color:T.burgundyMid,opacity:.5}}>لا توجد رسائل بعد</p>
+            </div></FadeIn>
+            :<div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:20}}>
+              {messages.map((m,i)=><GuestMessageCard key={m.id} m={m} i={i}/>)}
+            </div>}
+            <FadeIn delay={.4}>
+              <div style={{textAlign:'center',marginTop:60,padding:'0 16px'}}>
+                <GoldDivider width="40%" className="" />
+                <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.9rem',color:T.burgundyMid,opacity:.7,marginTop:24,lineHeight:1.8}}>نشكر جميع الأصدقاء الذين أرسلوا كلمات الثناء والتهاني</p>
+                <div className="font-ampersand" style={{fontSize:'2.5rem',color:T.gold,margin:'16px 0'}}>&amp;</div>
+              </div>
+            </FadeIn>
+          </div>
+        </section>;
+      }
+
+      /* ===== GUESTBOOK SUBMIT MODAL ===== */
+      function GuestSubmitModal({onClose}){
+        const[name,setName]=useState('');const[message,setMessage]=useState('');const[submitting,setSubmitting]=useState(false);const[sent,setSent]=useState(false);const[error,setError]=useState('');
+        return <div onClick={onClose} style={{position:'fixed',inset:0,zIndex:200,background:'rgba(42,8,16,0.65)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:24,animation:'fadeIn .25s ease'}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:T.cream,borderRadius:20,padding:'clamp(32px,6vw,52px)',width:'100%',maxWidth:480,position:'relative',boxShadow:'0 32px 80px rgba(0,0,0,0.4)',border:'1px solid '+T.creamDark,animation:'scaleUp .3s cubic-bezier(0.22,0.61,0.36,1)'}}>
+            <div style={{position:'absolute',inset:10,border:'1px solid '+T.gold,borderRadius:12,opacity:.4,pointerEvents:'none'}}/>
+            <button onClick={onClose} style={{position:'absolute',top:16,left:16,background:'none',border:'none',cursor:'pointer',color:T.burgundyMid,fontSize:'1.4rem',lineHeight:1,opacity:.6,transition:'opacity .2s'}} onMouseEnter={e=>e.currentTarget.style.opacity='1'} onMouseLeave={e=>e.currentTarget.style.opacity='.6'}>&times;</button>
+            {sent?<div dir="rtl" style={{textAlign:'center',padding:'16px 0'}}>
+              <div style={{fontSize:'2.5rem',marginBottom:16}}>🎉</div>
+              <h3 className="font-names" style={{fontSize:'1.6rem',color:T.burgundy,marginBottom:12}}>شكراً لك!</h3>
+              <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.9rem',color:T.burgundyMid,lineHeight:1.7}}>شكراً لك، وصلت رسالتك بنجاح وستظهر بعد مراجعتها.</p>
+              <div style={{width:'75%',margin:'24px auto'}}><GoldDivider/></div>
+              <button onClick={onClose} style={{background:T.burgundy,color:T.cream,fontFamily:'Cairo,sans-serif',fontWeight:700,fontSize:'.9rem',border:'none',borderRadius:100,padding:'12px 36px',cursor:'pointer'}}>إغلاق</button>
+            </div>
+            :<form onSubmit={async e=>{e.preventDefault();if(!name.trim()||!message.trim()){setError('يرجى ملء جميع الحقول');return}setSubmitting(true);setError('');try{const API='https://diohbudqfguqiwvivspm.supabase.co';const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpb2hidWRxZmd1cWl3dml2c3BtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY1MzkxODEsImV4cCI6MjEwMjExNTE4MX0.j2S_FnCcI3HWpJiBceOqDsgAemmOY8CgZ-wBzDWoybw';await fetch(API+'/rest/v1/guestbook_messages',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({guest_name:name.trim(),message:message.trim(),status:'pending'})});setSent(true)}catch{setError('حدث خطأ');}setSubmitting(false)}} dir="rtl" style={{position:'relative',zIndex:2}}>
+              <div style={{textAlign:'center',marginBottom:28}}>
+                <div className="font-ampersand" style={{fontSize:'1.8rem',color:T.gold,marginBottom:4}}>✉</div>
+                <h3 className="font-names" style={{fontSize:'1.5rem',color:T.burgundy,marginBottom:4}}>رسالتك للعروسين</h3>
+                <p style={{fontFamily:'Cairo,sans-serif',fontSize:'.8rem',color:T.burgundyMid,opacity:.7}}>اكتب كلماتك من القلب</p>
+              </div>
+              {[{l:'الاسم',v:name,s:setName,ph:'اسمك الكريم',multi:false},{l:'رسالتك',v:message,s:setMessage,ph:'اكتب كلماتك الجميلة هنا...',multi:true}].map(({l,v,s:st,ph,multi})=><div key={l} style={{marginBottom:16}}>
+                <label style={{fontFamily:'Cairo,sans-serif',fontSize:'.8rem',fontWeight:600,color:T.burgundy,display:'block',marginBottom:6}}>{l}</label>
+                {multi?<textarea value={v} onChange={e=>st(e.target.value)} placeholder={ph} rows={4} style={{width:'100%',padding:'12px 16px',fontFamily:'Cairo,sans-serif',fontSize:'.9rem',border:'1.5px solid '+T.creamDark,borderRadius:10,background:'#fff',color:T.textDark,outline:'none',resize:'vertical',boxSizing:'border-box',direction:'rtl',lineHeight:1.7,transition:'border-color .2s'}} onFocus={e=>e.target.style.borderColor=T.gold} onBlur={e=>e.target.style.borderColor=T.creamDark}/>
+                :<input value={v} onChange={e=>st(e.target.value)} placeholder={ph} style={{width:'100%',padding:'12px 16px',fontFamily:'Cairo,sans-serif',fontSize:'.9rem',border:'1.5px solid '+T.creamDark,borderRadius:10,background:'#fff',color:T.textDark,outline:'none',boxSizing:'border-box',direction:'rtl',transition:'border-color .2s'}} onFocus={e=>e.target.style.borderColor=T.gold} onBlur={e=>e.target.style.borderColor=T.creamDark}/>}
+              </div>)}
+              {error&&<p style={{fontFamily:'Cairo,sans-serif',fontSize:'.82rem',color:'#c0392b',textAlign:'center',marginBottom:12}}>{error}</p>}
+              <button type="submit" disabled={submitting} style={{width:'100%',background:submitting?T.burgundyLight:T.burgundy,color:T.cream,fontFamily:'Cairo,sans-serif',fontWeight:700,fontSize:'1rem',border:'none',borderRadius:100,padding:'14px 44px',cursor:submitting?'wait':'pointer',letterSpacing:'.06em',boxShadow:'0 6px 20px '+T.burgundy+'40',transition:'all .3s ease'}}>{submitting?'جاري...':'إرسال الرسالة'}</button>
+            </form>}
+          </div>
+        </div>;
+      }
+
+      /* ===== MUSIC BUTTON ===== */
+      function MusicButton(){
+        const[playing,setPlaying]=useState(false);
+        const[pulsing,setPulsing]=useState(false);
+        return <button onClick={()=>{setPulsing(true);setTimeout(()=>setPulsing(false),300);setPlaying(!playing)}} style={{position:'fixed',bottom:28,right:24,zIndex:999,width:56,height:56,borderRadius:'50%',border:'none',background:'radial-gradient(circle at 38% 38%,'+T.burgundyMid+' 0%,'+T.burgundy+' 70%,#3a0810 100%)',boxShadow:playing?'0 0 0 6px '+T.burgundy+'30, 0 8px 24px '+T.burgundy+'60':'0 4px 16px '+T.burgundy+'50',transform:pulsing?'scale(.88)':'scale(1)',transition:'box-shadow .4s ease, transform .15s ease',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+          {playing&&<div style={{position:'absolute',inset:-4,borderRadius:'50%',border:'2px solid '+T.gold,borderTopColor:'transparent',animation:'spin 2s linear infinite',pointerEvents:'none'}}/>}
+          {playing?<svg width="22" height="22" viewBox="0 0 24 24" fill={T.cream}><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+          :<svg width="22" height="22" viewBox="0 0 24 24" fill={T.cream}><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>}
+        </button>;
+      }
+
+      /* ===== APP ===== */
+      function App(){
+        const[opened,setOpened]=useState(false);
+        const[showModal,setShowModal]=useState(false);
+        if(!opened)return <OpeningScreen onOpen={()=>setOpened(true)}/>;
+        return <>
+          <MusicButton/>
+          <SaveTheDateSection/>
+          <div className="gold-line" style={{maxWidth:400,margin:'0 auto'}}/>
+          <DateSection/>
+          <div className="gold-line" style={{maxWidth:400,margin:'0 auto'}}/>
+          <GuestbookSection onOpenModal={()=>setShowModal(true)}/>
+          {showModal&&<GuestSubmitModal onClose={()=>setShowModal(false)}/>}
+        </>;
+      }
+      ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+  </body>
+</html>
